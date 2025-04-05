@@ -1,11 +1,11 @@
 import streamlit as st
-import openai
 import os
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
+from openai import OpenAI
 
-# OpenAI APIキー取得
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# OpenAI APIキー
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 st.title("企業情報レポート自動生成")
 
@@ -13,7 +13,7 @@ company_input = st.text_input("企業名または特徴を入力してくださ�
 
 if st.button("レポート生成") and company_input:
     with st.spinner("情報収集中..."):
-        # ダミーデータ（後でWeb検索と組み合わせ）
+        # 仮の企業情報（後で検索結果に置き換え可能）
         search_result = f"""{company_input} に関する最新のニュースや会社情報です。
 ・業界での立ち位置：テック業界において急成長中
 ・競合企業：企業A、企業B
@@ -28,10 +28,11 @@ if st.button("レポート生成") and company_input:
 
 {search_result}"""
 
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}]
         )
+
         summary = response.choices[0].message.content
 
         # PDF生成
