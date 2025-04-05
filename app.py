@@ -39,7 +39,7 @@ if st.button("レポート生成") and company_input:
         c = canvas.Canvas(pdf_path, pagesize=A4)
         width, height = A4
         text = c.beginText(40, height - 50)
-        text.setFont("Helvetica", 12)
+        text.setFont("Times-Roman", 12)
         for line in summary.split("\n"):
             text.textLine(line)
         c.drawText(text)
